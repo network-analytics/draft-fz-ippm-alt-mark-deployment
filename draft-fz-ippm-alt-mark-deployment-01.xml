@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="3"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<rfc category="info" docName="draft-fz-ippm-alt-mark-deployment-01"
+     ipr="trust200902">
+  <front>
+    <title abbrev="enhanced-alternate-marking">Alternate Marking Deployment
+    Framework</title>
+
+    <author fullname="Giuseppe Fioccola" initials="G." surname="Fioccola">
+      <organization>Huawei</organization>
+
+      <address>
+        <postal>
+          <street>Palazzo Verrocchio, Centro Direzionale Milano 2</street>
+
+          <city>Segrate (Milan)</city>
+
+          <region/>
+
+          <code>20054</code>
+
+          <country>Italy</country>
+        </postal>
+
+        <email>giuseppe.fioccola@huawei.com</email>
+      </address>
+    </author>
+
+    <author fullname="Tianran Zhou" initials="T." surname="Zhou">
+      <organization>Huawei</organization>
+
+      <address>
+        <postal>
+          <street>156 Beiqing Rd.</street>
+
+          <city>Beijing</city>
+
+          <code>100095</code>
+
+          <region/>
+
+          <country>China</country>
+        </postal>
+
+        <email>zhoutianran@huawei.com</email>
+      </address>
+    </author>
+
+    <author fullname="Thomas Graf" initials="T." surname="Graf">
+      <organization>Swisscom</organization>
+
+      <address>
+        <postal>
+          <street>Binzring 17</street>
+
+          <city>Zurich</city>
+
+          <code>CH-8045</code>
+
+          <region/>
+
+          <country>Switzerland</country>
+        </postal>
+
+        <email>thomas.graf@swisscom.com</email>
+      </address>
+    </author>
+
+    <author fullname="Fabrizio Milan" initials="F." surname="Milan">
+      <organization>TIM</organization>
+
+      <address>
+        <postal>
+          <street>Via Reiss Romoli, 274</street>
+
+          <city>Torino</city>
+
+          <region/>
+
+          <code>10148</code>
+
+          <country>Italy</country>
+        </postal>
+
+        <email>fabrizio.milan@telecomitalia.it</email>
+      </address>
+    </author>
+
+    <author fullname="Massimo Nilo" initials="M." surname="Nilo">
+      <organization>TIM</organization>
+
+      <address>
+        <postal>
+          <street>Via Reiss Romoli, 274</street>
+
+          <city>Torino</city>
+
+          <region/>
+
+          <code>10148</code>
+
+          <country>Italy</country>
+        </postal>
+
+        <email>massimo.nilo@telecomitalia.it</email>
+      </address>
+    </author>
+
+    <author fullname="Keyi Zhu" initials="K." surname="Zhu">
+      <organization>Huawei</organization>
+
+      <address>
+        <postal>
+          <street/>
+
+          <city/>
+
+          <code/>
+
+          <region/>
+
+          <country/>
+        </postal>
+
+        <email>zhukeyi@huawei.com</email>
+      </address>
+    </author>
+
+    <author fullname="Lin Zhang" initials="L." surname="Zhang">
+      <organization>China Mobile</organization>
+
+      <address>
+        <postal>
+          <street/>
+
+          <city/>
+
+          <code/>
+
+          <region/>
+
+          <country/>
+        </postal>
+
+        <email>zhanglin1@cmdi.chinamobile.com</email>
+      </address>
+    </author>
+
+    <date day="25" month="September" year="2023"/>
+
+    <workgroup>IPPM</workgroup>
+
+    <abstract>
+      <t>This document provides a framework for Alternate Marking deployment
+      and includes considerations and guidance for the deployment of the
+      methodology.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>The <xref target="RFC9341">Alternate Marking</xref> and <xref
+      target="RFC9342">Multipoint Alternate Marking</xref> define the
+      Alternate Marking technique that is a hybrid performance measurement
+      method, per <xref target="RFC7799"/> classification of measurement
+      methods. This method is based on marking consecutive batches of packets
+      and it can be used to measure packet loss, latency, and jitter on live
+      traffic.</t>
+
+      <t>The first experiments on Alternate-Marking are described in <xref
+      target="RFC8321"/> and <xref target="RFC8889"/>.</t>
+
+      <t>According to the definitions of <xref target="RFC7799"/>, the
+      Alternate-Marking Method can be classified as Hybrid Type I. Indeed,
+      Alternate Marking can be implemented by using reserved bits in the
+      protocol header, and the change in value of these marking bits at the
+      source node is formally considered a modification of the stream of
+      interest.</t>
+
+      <t>This document complements <xref target="RFC9341"/> and <xref
+      target="RFC9342"/> as it explains the mechanisms that can be used to
+      manage and deploy the method.</t>
+
+      <section title="Requirements Language">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+        "OPTIONAL" in this document are to be interpreted as described in BCP
+        14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only
+        when, they appear in all capitals, as shown here.</t>
+      </section>
+
+      <section title="Terminology">
+        <t>Abbreviations used in this document:<list>
+            <t>AltMark: Alternate-Marking</t>
+
+            <t>NMS: Network Management System</t>
+
+            <t>IPv6: Internet Protocol version 6</t>
+
+            <t>SRv6: Segment Routing over IPv6 dataplane</t>
+
+            <t>BIER: Bit Index Explicit Replication</t>
+
+            <t>MPLS: Multi-Protocol Label Switching</t>
+
+            <t>SFC: Service Function Chaining</t>
+
+            <t>NVO3: Network Virtualization Overlays</t>
+
+            <t>IPFIX: IP Flow Information Export</t>
+
+            <t>YANG: Yet Another Next Generation</t>
+
+            <t>PCEP: Path Computation Element Communication Protocol</t>
+
+            <t>BGP: Border Gateway Protocol</t>
+          </list></t>
+      </section>
+    </section>
+
+    <section title="Alternate Marking Deployment Domain">
+      <t>The Alternate Marking Method MUST be deployed in a controlled domain
+      for security and compatibility reasons. In this regard, <xref
+      target="RFC8799"/> reports further examples of specific limited domain
+      solutions. It is not common that the user traffic originates and
+      terminates within the controlled domain. For this reason, it will
+      typically only be applicable in an overlay network, where user traffic
+      is encapsulated at one domain border, decapsulated at the other domain
+      border and the encapsulation incorporates the relevant extension header
+      for Alternate Marking. This requirement also implies that an
+      implementation MUST filter packets that carry Alternate Marking data and
+      are entering or leaving the controlled domain.</t>
+
+      <t>A controlled domain is a managed network where it is required to
+      select, monitor and control the access to the network by enforcing
+      policies at the domain boundaries in order to discard undesired external
+      packets entering the domain and check the internal packets leaving the
+      domain. It does not necessarily mean that a controlled domain is a
+      single administrative domain or a single organization. A controlled
+      domain can correspond to a single administrative domain or can be
+      composed by multiple administrative domains under a defined network
+      management. Indeed, some scenarios may imply that the Alternate Marking
+      Method involves more than one domain, but in these cases, it is
+      RECOMMENDED that the multiple domains create a whole controlled domain
+      while traversing the external domain by employing IPsec authentication
+      and encryption or other VPN technology that provides full packet
+      confidentiality and integrity protection. In a few words, it must be
+      possible to control the domain boundaries and eventually use specific
+      precautions if the traffic traverse the Internet.</t>
+
+      <t>The Alternate Marking measurement domain can overlap with the
+      controlled domain or may be a subset of the controlled domain. The
+      typical scenarios for the application of the Alternate Marking Method
+      depend on the controlled domain boundaries, in particular:<list>
+          <t>the user equipment can be the starting or ending node, only in
+          case it is fully managed and if it belongs to the controlled domain.
+          In this case the user generated packets contain the Alternate
+          Marking data. But, in practice, this is not common due to the fact
+          that the user equipment cannot be totally secured in the majority of
+          cases.</t>
+
+          <t>the CPE (Customer Premises Equipment) or the PE (Provider Edge)
+          routers are most likely to be the starting or ending nodes since
+          they can be border routers of the controlled domain. For instance,
+          the CPE, which connects the user's premises with the service
+          provider's network, belongs to a controlled domain only if it is
+          managed by the service provider and if additional security measures
+          are taken to keep it trustworthy. Typically the CPE or the PE can
+          encapsulate a received packet in an outer header which contains the
+          Alternate Marking data. They can also be able to filter and drop
+          packets from outside of the domain with inconsistent fields to make
+          effective the relevant security rules at the domain boundaries, for
+          example a simple security check can be to insert the Alternate
+          Marking data if and only if the destination is within the controlled
+          domain.</t>
+        </list></t>
+    </section>
+
+    <section title="Alternate Marking Measurement Nodes">
+      <t>An Alternate-Marking Domain consists of marking nodes, unmarking
+      nodes, and transit nodes.<list>
+          <t>A marking node, also called encapsulating node, incorporates the
+          AltMark Data Fields into packets in order to enable
+          Alternate-Marking. If the Alternate-Marking method is enabled for a
+          selected flow of the traffic, the encapsulating node is responsible
+          for applying the AltMark functionality to the selected flow and to
+          take initial timestamps and packet counters.</t>
+
+          <t>A transit node only reads AltMark Data Fields in order to take
+          timestamps and packet counters.</t>
+
+          <t>An unmarking node, also called decapsulating node, reads AltMark
+          Data Fields in order to take final timestamps and packet counters
+          and then removes any AltMark Option from packets.</t>
+        </list></t>
+
+      <figure title="Roles of Alternate-Marking Nodes">
+        <artwork><![CDATA[
+          Export of       Export of       Export of      Export of
+          AltMark data    AltMark data    AltMark data   AltMark data
+              ^               ^               ^               ^
+              |               |               |               |
+              |               |               |               |
+User     +----+----+     +----+----+     +----+----+     +----+----+
+packets  |Marking  |     | Transit |     | Transit |     |Unmarking|
+-------->|Node     |====>| Node    |====>| Node    |====>|Node     |-->
+         |         |     | A       |     | B       |     |         |
+         +---------+     +---------+     +---------+     +---------+
+]]></artwork>
+      </figure>
+    </section>
+
+    <section title="Type of Measurements">
+      <t>The methodology described in the previous sections can be applied to
+      various performance measurement problems. The only requirement is to
+      select and mark the flow to be monitored; in this way, packets are
+      batched by the sender, and each batch is alternately marked such that it
+      can be easily recognized by the receiver.</t>
+
+      <t>Either one or two flag bits might be available for marking in
+      different deployments:<list>
+          <t>One flag: packet loss measurement MUST be done as described in
+          Section 3.1 of <xref target="RFC9341"/>, while delay measurement
+          MUST be done according to the single-marking method described in
+          Section 3.2.1 of <xref target="RFC9341"/>. Mean delay (Section
+          3.2.1.1 of <xref target="RFC9341"/>) MAY also be used but it could
+          imply more computational load.</t>
+
+          <t>Two flags: packet loss measurement MUST be done as described in
+          Section 3.1 of <xref target="RFC9341"/>, while delay measurement
+          MUST be done according to double-marking method Section 3.2.2 of
+          <xref target="RFC9341"/>. In this case single-marking MAY also be
+          used in combination with double-marking and the two approaches
+          provide slightly different pieces of information that can be
+          combined to have a more robust data set.</t>
+        </list></t>
+
+      <t>There are some operational guidelines to consider for the purpose of
+      deciding to follow the recommendations above and use one or two
+      flags.<list>
+          <t>The Alternate-Marking method utilizes specific flags in the
+          packet header, so an important factor is the number of flags
+          available for the implementation. Indeed, if there is only one flag
+          available there is no other way, while if two flags are available
+          the option with two flags is certainly more complete.</t>
+
+          <t>The duration of the Alternate-Marking period affects the
+          frequency of the measurement and this is a parameter that can be
+          decided on the basis of the required temporal sampling. But it
+          cannot be freely chosen, as explained in Section 5 of <xref
+          target="RFC9341"/>.</t>
+
+          <t>The Alternate-Marking methodologies enable packet loss, delay and
+          delay variation calculation, but in accordance with the method used
+          (e.g. single-marking or double-marking), there is different kind of
+          information that can be derived. For example, to get more statistics
+          of extent data, the option with two flags is desirable. For this
+          reason, the type of data needed in the specific scenario is an
+          additional element to take into account.</t>
+
+          <t>The Alternate-Marking methods imply different computational load
+          depending on the method employed. Therefore, the available
+          computational resources on the measurement points can also influence
+          the choice. As an example, mean delay calculation may require more
+          processing and it may not be the best option to minimize the
+          computational load.</t>
+        </list></t>
+
+      <t>A deployment of the Alternate-Marking Method should also take into
+      account how to handle and recognize marked and unmarked traffic. Since
+      Alternate-Marking normally employs a marking field which is dedicated,
+      reserved, and included in a protocol extension, the measurement points
+      can learn whether the measurement is activated or not by checking if the
+      specific extension is included or not within the packets.</t>
+    </section>
+
+    <section title="Manageability">
+      <t>The YANG model can be used for configuring Alternate-Marking in
+      network nodes that support it. An example is defined in <xref
+      target="I-D.wang-ippm-alt-mark-yang"/>.</t>
+
+      <t>There are also other control plane mechanisms to advertise and
+      activate AltMark capabilities, using PCEP or BGP: <xref
+      target="I-D.ietf-idr-sr-policy-ifit"/>, <xref
+      target="I-D.ietf-idr-bgp-ifit-capabilities"/>, <xref
+      target="I-D.ietf-pce-pcep-ifit"/>.</t>
+
+      <t>These mechanisms can be used to signal and configure the parameters
+      to identify the flow to monitor both in case of point-to-point flow and
+      multipoint-to-multipoint flow. Indeed, the selection of the
+      identification fields directly affects the type of paths that the flow
+      would follow in the network. As an example, for IPv6 the setting of the
+      Flow Monitoring Identification (FlowMonID) is used in combination with
+      source and destination addresses to identify a flow, as described in
+      Section 5.3 of <xref target="RFC9343"/>, and it can be algorithmically
+      generated by the source node or assigned by the central controller.</t>
+
+      <t>Additionally, other parameters are essential for the activation of
+      the AltMark methodology: the choice between end-to-end or hop-by-hop
+      measurement, the choice between the methods with one flag or two flags
+      and the duration of the Alternate-Marking period which affects the
+      measurement frequency (longer the duration of the block, the less
+      frequently the measurement can be taken).</t>
+    </section>
+
+    <section title="Data Export and Collection">
+      <t>Each packet marked for Alternate-Marking, as for example the AltMark
+      IPv6 option type defined in Section 3.1 of <xref target="RFC9343"/> or
+      the Segment Routing TLV Type as defined in Section 3.1 of <xref
+      target="I-D.fz-spring-srv6-alt-mark"/> MUST be copied to the IPFIX or
+      YANG push metering process depending which Network Telemetry <xref
+      target="RFC9232"/> protocol is used to export the data.</t>
+
+      <figure title="Alternate-Marking Framework with Data Export">
+        <artwork><![CDATA[
+                                +--------------+
+                               +-------------+ |
+                               | Network     | |
+                               | Data        | |
+                               | Collection  |-+
+                               +-------------+
+                                      ^
+                                      |
+                                      |
+                                      |
+              +---------------+-------+-------+---------------+
+              |               |               |               |
+              |               |               |               |
+User     +----+----+     +----+----+     +----+----+     +----+----+
+packets  |Marking  |     | Transit |     | Transit |     |Unmarking|
+-------->|Node     |====>| Node    |====>| Node    |====>|Node     |-->
+         |         |     | A       |     | B       |     |         |
+         +---------+     +---------+     +---------+     +---------+
+
+]]></artwork>
+      </figure>
+
+      <section title="IPFIX">
+        <t>For IPFIX <xref target="RFC7011"/>, the data decomposition can be
+        achieved on the Alternate-Marking-aware node exporting the data or on
+        the data collection. When decomposed at the data collection, the
+        headers, as example the IPv6 options type header described in Section
+        3.1 of <xref target="RFC9343"/> or the Segment Routing header TLV as
+        described in Section 3.1 of <xref
+        target="I-D.fz-spring-srv6-alt-mark"/> containing the FlowMonID, Loss
+        and Delay flag are being exposed as part of
+        ipPayloadPacketSection(IE314), defined in Section 4.2 of RFC 7133.
+        When being decomposed on the Alternate-Marking-aware node, new IPFIX
+        entities for FlowMonID, Loss and Delay flag are needed so that the
+        data can now be aggregated according to section 5 of <xref
+        target="RFC7015"/>. FlowMonID is a Flow Key field. The following IPFIX
+        entities are of interest to describe the relationship to the
+        forwarding topology and the control-plane.</t>
+
+        <t><list style="symbols">
+            <t>node id, ingressInterface(IE10) and egressInterface(IE14)
+            describes on which node which logical ingress and egress
+            interfaces have been used to forward the packet.</t>
+
+            <t>Node id and egressPhysicalInterface(253) describes on which
+            node which physical egress interfaces have been used to forward
+            the packet.</t>
+
+            <t>Node id and ipNextHopIPv4Address(IE15) or
+            ipNextHopIPv6Address(IE62), describes the forwarding path to which
+            next-hop IP address.</t>
+
+            <t>Node id and mplsTopLabelIPv4Address(IE47) or
+            srhActiveSegmentIPv6 from <xref
+            target="I-D.ietf-opsawg-ipfix-srv6-srh"/> describes the forwarding
+            path to which MPLS top label IPv4 address or SRv6 active
+            segment.</t>
+
+            <t>BGP communities are often used for setting a path priority or
+            service selection. bgpDestinationExtendedCommunityList(488) or
+            bgpDestinationCommunityList(485) or
+            bgpDestinationLargeCommunityList(491) describes which group of
+            prefixes have been used to forward the packet.</t>
+
+            <t>Node id and destinationIPv4Address(13),
+            destinationTransportPort(11), protocolIdentifier (4) and
+            sourceIPv4Address(IE8) describes the forwarding path on each node
+            from each IPv4 source address to a specific application in the
+            network.</t>
+          </list></t>
+
+        <t>To calculate loss, the packet count with octetDeltaCount(IE1) and
+        to calculate delay, either flowStartSeconds(IE150),
+        flowStartMilliseconds(IE152), flowStartMicroseconds(IE154) or
+        flowStartNanoseconds(IE156), depending on timestamp granularity
+        requirements, are needed.</t>
+
+        <t>To calculate loss, the packet count with octetDeltaCount(IE1) and
+        to calculate delay, either flowStartSeconds(IE150),
+        flowStartMilliseconds(IE152), flowStartMicroseconds(IE154) or
+        flowStartNanoseconds(IE156), depending on timestamp granularity
+        requirements, are needed.</t>
+      </section>
+
+      <section title="YANG Push">
+        <t>For YANG Push <xref target="RFC8639"/>, periodical subscription as
+        defined in Section 3.1 of <xref target="RFC8641"/> is used to
+        subscribe data. Decomposition is done on the Alternate-Marking-aware
+        node publishing the data. The YANG module contains FlowMonID as key,
+        Loss and Delay flag, ingress and egress interface ifIndex <xref
+        target="RFC2863"/>, octet delta count describing the amount of
+        observed packets within a flow to measure loss, and flow start
+        timestamp describing the first packet observed for measuring delay as
+        leafes.</t>
+
+        <t>Since the amount of observed data could overwhelm a route processor
+        on a network node, publishing data from network processors as
+        specified in <xref target="I-D.ietf-netconf-distributed-notif"/> is
+        advised.</t>
+      </section>
+    </section>
+
+    <section title="Encapsulations">
+      <section title="IPv6">
+        <t>Alternate-Marking encapsulation for IPv6 is defined in <xref
+        target="RFC9343"/>, which also discusses deployment considerations for
+        IPv6 networks.</t>
+
+        <t>The <xref target="RFC9343">IPv6 AltMark Option</xref> applies the
+        Alternate Marking Method to IPv6, and defines an Extension Header
+        Option to encode the Alternate Marking Method for both the Hop-by-Hop
+        Options Header and the Destination Options Header.</t>
+      </section>
+
+      <section title="SRv6">
+        <t>Alternate-Marking encapsulation for SRv6 is discussed in <xref
+        target="RFC9343">IPv6 AltMark Option</xref> and <xref
+        target="I-D.fz-spring-srv6-alt-mark"/>.</t>
+      </section>
+
+      <section title="BIER">
+        <t>Alternate-Marking encapsulation for BIER is introduced in <xref
+        target="I-D.ietf-bier-pmmm-oam"/>.</t>
+      </section>
+
+      <section title="MPLS">
+        <t>Alternate-Marking encapsulation for MPLS is introduced in <xref
+        target="I-D.ietf-mpls-rfc6374-sfl"/>.</t>
+      </section>
+
+      <section title="SFC">
+        <t>Alternate-Marking encapsulation for SFC is introduced in <xref
+        target="I-D.mfm-ippm-sfc-nsh-pmamm"/>.</t>
+      </section>
+
+      <section title="NVO3">
+        <t>Alternate-Marking encapsulation for NVO3 is introduced in <xref
+        target="I-D.fmm-nvo3-pm-alt-mark"/>.</t>
+      </section>
+
+      <section title="Enhanced capabilities">
+        <t><xref target="I-D.zhou-ippm-enhanced-alternate-marking"/> defines
+        extended data fields for the AltMark Option and provides enhanced
+        capabilities to overcome some challenges and enable future proof
+        applications.</t>
+
+        <t>It is worth mentioning that the enhanced capabilities are intended
+        for further use and are optional.</t>
+      </section>
+    </section>
+
+    <section title="Implementation Considerations">
+      <t>In a controlled domain, the nodes may support the AltMark specific
+      encapsulation and this also depends on the implementation. If a node is
+      configured to read the AltMark option, the measurement is done on that
+      node, otherwise it is simply not considered in the measurement.</t>
+
+      <t>Assuming that the measurement domain overlaps with the controlled
+      domain, the procedure for AltMark data encapsulation can be summarized
+      as follows: <list style="symbols">
+          <t>Ingress Node: the Ingress Node of a controlled domain that
+          supports the Alternate Marking Method adds the AltMark data in the
+          the data packets.</t>
+
+          <t>Intermediate Node: if an Intermediate Node is not capable of
+          processing the AltMark data, it simply ignores it. If an
+          Intermediate Node is capable of processing the AltMark data, it
+          processes it.</t>
+
+          <t>Egress SR Node: The Egress Node is the last node of the
+          controlled domain. The processing if the AltMark data is similar to
+          the processing at the Intermediate Nodes. The only difference is
+          that it needs to remove the AltMark data from the the data
+          packets.</t>
+        </list></t>
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+      <t><xref target="RFC9341">Alternate Marking</xref> and <xref
+      target="RFC9342">Multipoint Alternate Marking</xref> analyze different
+      security concerns and related solutions. These aspects are valid and
+      applicable also to this document. In particular the fundamental security
+      requirement is that Alternate Marking MUST only be applied in a specific
+      limited domain, as also mentioned in <xref target="RFC8799"/>.</t>
+    </section>
+
+    <section anchor="IANA" title="IANA Considerations">
+      <t>This document has no request to IANA.</t>
+    </section>
+
+    <section anchor="Acknowledgements" title="Acknowledgements">
+      <t>TBD</t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <?rfc include='reference.RFC.2119'?>
+
+      <?rfc include='reference.RFC.8174'?>
+
+      <?rfc include='reference.RFC.9341'?>
+
+      <?rfc include='reference.RFC.9342'?>
+
+      <?rfc include='reference.RFC.9343'?>
+    </references>
+
+    <references title="Informative References">
+      <?rfc include='reference.RFC.2863'?>
+
+      <?rfc include='reference.RFC.7011'?>
+
+      <?rfc include='reference.RFC.7015'?>
+
+      <?rfc include='reference.RFC.8321'?>
+
+      <?rfc include='reference.RFC.8889'?>
+
+      <?rfc include='reference.RFC.7799'?>
+
+      <?rfc include='reference.RFC.8799'?>
+
+      <?rfc include='reference.RFC.8639'?>
+
+      <?rfc include='reference.RFC.8641'?>
+
+      <?rfc include='reference.RFC.9232'?>
+
+      <?rfc include='reference.I-D.zhou-ippm-enhanced-alternate-marking'?>
+
+      <?rfc include='reference.I-D.ietf-idr-sr-policy-ifit'?>
+
+      <?rfc include='reference.I-D.ietf-idr-bgp-ifit-capabilities'?>
+
+      <?rfc include='reference.I-D.ietf-pce-pcep-ifit'?>
+
+      <?rfc include='reference.I-D.wang-ippm-alt-mark-yang'?>
+
+      <?rfc include='reference.I-D.fz-spring-srv6-alt-mark'?>
+
+      <?rfc include='reference.I-D.ietf-bier-pmmm-oam'?>
+
+      <?rfc include='reference.I-D.ietf-mpls-rfc6374-sfl'?>
+
+      <?rfc include='reference.I-D.mfm-ippm-sfc-nsh-pmamm'?>
+
+      <?rfc include='reference.I-D.fmm-nvo3-pm-alt-mark'?>
+
+      <?rfc include='reference.I-D.ietf-opsawg-ipfix-srv6-srh'?>
+
+      <?rfc include='reference.I-D.ietf-netconf-distributed-notif'?>
+    </references>
+  </back>
+</rfc>
